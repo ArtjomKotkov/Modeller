@@ -1,9 +1,6 @@
-from __future__ import annotations
-
 from typing import Any, Callable
 
-from ..evaluator import Evaluable, ExecutingOptions
-from ..combiner import Dialect
+from ..base import Dialect, Evaluable, ExecutingOptions
 
 
 __all__ = [
@@ -59,7 +56,7 @@ class PythonDialect(Dialect):
         return lambda model: value1(model) in value2(model)
 
     def _has_(self, value1: Any, value2: Any):
-        raise NotImplemented
+        raise self._in_(value2, value1)
 
     def _has_any_(self, value1: Any, value2: Any):
         raise NotImplemented

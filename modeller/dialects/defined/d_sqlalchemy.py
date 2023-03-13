@@ -1,11 +1,8 @@
-from __future__ import annotations
-
 from typing import Any
 
 import sqlalchemy as sa
 
-from ..evaluator import Evaluable, ExecutingOptions
-from ..combiner import Dialect
+from ..base import Dialect, Evaluable, ExecutingOptions
 
 
 __all__ = [
@@ -52,7 +49,7 @@ class SqlAlchemyDialect(Dialect):
         return value1.in_(value2)
 
     def _has_(self, value1: Any, value2: Any):
-        raise NotImplemented
+        raise value2.in_(value1)
 
     def _has_any_(self, value1: Any, value2: Any):
         raise NotImplemented

@@ -1,6 +1,6 @@
 from typing import Any
 
-from src.evaluator import Dialect
+from ..base import Dialect
 
 
 __all__ = [

@@ -4,10 +4,11 @@ from abc import ABC, abstractmethod
 from typing import TypedDict, NotRequired
 from typing import Any
 
+
 __all__ = [
     'Dialect',
-    'Evaluable',
-    'ExecutingOptions'
+    'ExecutingOptions',
+    'Evaluable'
 ]
 
 

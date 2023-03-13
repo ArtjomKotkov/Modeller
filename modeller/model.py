@@ -1,10 +1,8 @@
-from __future__ import annotations
-
 from typing import Any
 
 from pydantic import create_model
 
-from .combiner import Box
+from .combining import Box
 
 
 class SMetaModel(type):

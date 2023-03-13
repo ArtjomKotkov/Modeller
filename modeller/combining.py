@@ -3,7 +3,7 @@ from __future__ import annotations
 from copy import copy
 from typing import Any
 
-from .evaluator import Dialect, Evaluable, ExecutingOptions
+from .dialects import Dialect, Evaluable, ExecutingOptions
 
 
 class Combinable:
