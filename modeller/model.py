@@ -1,4 +1,4 @@
-from typing import Any
+from typing import Any, Dict
 
 from pydantic import create_model
 
@@ -21,6 +21,9 @@ class SModel(metaclass=SMetaModel):
         self._store = {}
 
         self._prepare(kwargs)
+
+    def as_dict(self) -> Dict[str, Any]:
+        return self._store
 
     def _prepare(self, data: dict) -> None:
         default_data = self._extract_default_values()
