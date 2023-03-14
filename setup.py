@@ -9,5 +9,5 @@ setup(
         'pydantic==1.10.6',
         'SQLAlchemy==2.0.5.post1',
     ],
-    python_requires='>=3.6.9'
+    python_requires='>=3.11'
 )
