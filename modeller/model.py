@@ -53,7 +53,7 @@ class SModel(metaclass=SMetaModel):
         annotations_scheme = {key: (value, ...) for key, value in cls.__annotations__.items()}
         return create_model('validation_model', **annotations_scheme)
 
-    def __getattribute__(self, item: str):
+    def __getattribute__(self, item: str) -> None:
         if item == '_store':
             return super().__getattribute__(item)
 
@@ -61,3 +61,9 @@ class SModel(metaclass=SMetaModel):
             return self._store[item]
         except KeyError:
             return super().__getattribute__(item)
+
+    def __setattr__(self, key, value) -> None:
+        if not self._store.get(key):
+            raise AttributeError
+
+        self._store[key] = value
