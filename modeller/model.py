@@ -6,6 +6,13 @@ from .combining import Box
 
 
 class SMetaModel(type):
+    def __new__(cls, *args, **kwargs):
+        instance = super().__new__(cls, *args, **kwargs)
+
+        instance._create_validation_model()
+
+        return instance
+
     def __getattribute__(self, item: str):
         if item.startswith('__') and item.endswith('__'):
             return super().__getattribute__(item)
@@ -44,14 +51,16 @@ class SModel(metaclass=SMetaModel):
             if key in cls.__annotations__.keys() and value is not None
         }
 
-    def _validate(self, data: dict) -> dict:
-        validation_model = self._create_validation_model()
-        return validation_model(**data).dict()
+    @classmethod
+    def _validate(cls, data: dict) -> dict:
+        if cls.__pydantic_model__ is None:
+            cls._create_validation_model()
+        return cls.__pydantic_model__(**data).dict()
 
     @classmethod
     def _create_validation_model(cls):
         annotations_scheme = {key: (value, ...) for key, value in cls.__annotations__.items()}
-        return create_model('validation_model', **annotations_scheme)
+        cls.__pydantic_model__ = create_model('validation_model', **annotations_scheme)
 
     def __getattribute__(self, item: str) -> None:
         if item == '_store':
@@ -67,3 +76,11 @@ class SModel(metaclass=SMetaModel):
             raise AttributeError
 
         self._store[key] = value
+
+    @classmethod
+    def __get_validators__(cls):
+        yield cls._dummy_validator
+
+    @classmethod
+    def _dummy_validator(cls, *args, **kwargs):
+        ...
