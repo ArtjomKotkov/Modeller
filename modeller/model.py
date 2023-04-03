@@ -48,7 +48,7 @@ class SModel(metaclass=SMetaModel):
             key: value
             for key, value
             in cls.__dict__.items()
-            if key in cls.__annotations__.keys() and value is not None
+            if key in cls.__annotations__.keys()
         }
 
     @classmethod
@@ -63,7 +63,12 @@ class SModel(metaclass=SMetaModel):
         cls.__pydantic_model__ = create_model('validation_model', **annotations_scheme)
 
     def __getattribute__(self, item: str) -> None:
-        if item == '_store':
+        if (
+                item.startswith('__') and item.endswith('__')
+                or item.startswith('_')
+                or item in self.__class__.__dict__.keys()
+                or item in self.__dict__.keys()
+        ):
             return super().__getattribute__(item)
 
         try:
@@ -72,6 +77,9 @@ class SModel(metaclass=SMetaModel):
             return super().__getattribute__(item)
 
     def __setattr__(self, key, value) -> None:
+        if key.startswith('_'):
+            return super().__setattr__(key, value)
+
         if not self._store.get(key):
             raise AttributeError
 
@@ -83,4 +91,4 @@ class SModel(metaclass=SMetaModel):
 
     @classmethod
     def _dummy_validator(cls, *args, **kwargs):
-        ...
+        return args[0]
